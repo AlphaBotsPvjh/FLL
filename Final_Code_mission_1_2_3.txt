@@ -1,0 +1,83 @@
+from hub import light_matrix
+import runloop
+from hub import port
+import motor
+import motor_pair
+
+async def main():
+    motor_pair.pair(motor_pair.PAIR_1, port.A, port.F)
+    motor_pair.pair(motor_pair.PAIR_2, port.D, port.C)
+    print('Move to Mission1 one and Push lever')
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, -580, 0, velocity=600)
+
+    # await motor_pair.move_tank_for_time(motor_pair.PAIR_1, 1000, 1000, 1000)
+    await motor.run_for_time(port.D, 1000, -350)
+    await motor.run_for_time(port.D, 500, motor.BRAKE)
+    #Add more pressure to ensure that the mission is a success
+    await motor.run_for_time(port.D, 600, -100)
+    await motor.run_for_time(port.D, 500, motor.BRAKE)
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 100, 0, velocity=400)
+    await motor.run_for_time(port.D, 1000, 350)
+
+    print('Move motor back little bit')
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 130, 0)
+
+    print('Rotate towards Mission 2 and move upto Mission 2')
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 40)
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, -1250, 0, velocity=400)
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, -180, 85)
+    # code to move the hub forward as it comes near the theatre scene
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, -50, 0, velocity=400)
+
+    print('Push Machine 2 lever')
+    #code line to push the arm down
+    #motor_pair.move_for_time(motor_pair.PAIR_1, 290, 0)
+    await motor.run_for_time(port.D, 520, -350)
+    #await motor_pair.stop(motor_pair.PAIR_2, stop: motor.BRAKE)
+    #code to bring back the arm
+    #await motor.run_for_time(port.D, 1000, 350)
+    #code to stop the motor for XXX milliseconds
+    await motor.run_for_time(port.D, 3000, motor.BRAKE)
+    #code to futher push the arm
+    await motor.run_for_time(port.D, 200, -500)
+    #code to stop the motor for XXX milliseconds
+    await motor.run_for_time(port.D, 3000, motor.BRAKE)
+    #code to bring back the arm to normal position
+    await motor.run_for_time(port.D, 1000, 350)
+    #await motor.run_for_time(port.D, 1000, 500, acceleration=1000)
+
+    #  Now we got to the 3rd mission.
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 90)
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, -300, 0, velocity=400)
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 120, 90)
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, -120, 0, velocity=400)
+    #We are at the mission, now to move the lever
+    await motor.run_for_time(port.D, 700, -200)
+    await motor.run_for_time(port.D, 500, motor.BRAKE)
+    #Add more pressure to ensure that the mission is a success
+    await motor.run_for_time(port.D, 600, -100)
+    await motor.run_for_time(port.D, 500, motor.BRAKE)
+    #Move the lever back into position
+    await motor.run_for_time(port.D, 1000, 350)
+    #  await motor_pair.move_for_time(motor_pair.PAIR_1, -1500, 0)
+    #await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 25)
+    #await motor_pair.move_for_degrees(motor_pair.PAIR_1, -180, 135)
+
+    #await motor.run_for_time(port.D, duration=1000, velocity=1000)
+
+    #await motor_pair.move_for_degrees(motor_pair.PAIR_1, -180, 125)
+    # await motor_pair.move_for_degrees(motor_pair.PAIR_1, -500, 0, velocity=400)
+    # await motor.run_for_time(port.D, 1000, -200)
+    # await motor.run_for_time(port.D, 700, 300)
+
+    # print('Rotate towards Machine 3 and move upto Machine 3')
+    # #await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 135)
+    # await motor.run_for_time(port.D, 700, 300)
+
+    # await motor_pair.move_for_degrees(motor_pair.PAIR_1, -500, 0, velocity=400)
+
+    # print('Push Machine 3 lever')
+    # await motor.run_for_time(port.D, 700, -300)
+    # await motor.run_for_time(port.D, 700, 300)
+
+runloop.run(main())
